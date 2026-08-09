@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoPontos</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <main id="app">
+    <section class="tela" data-rota="#/login" id="tela-login">
+      <p class="titulo-tela">🌱 EcoPontos</p>
+      <form id="form-login">
+        <input class="campo" type="email" placeholder="Email" required />
+        <input class="campo" type="password" placeholder="Senha" required />
+        <button type="submit" class="botao">Entrar</button>
+      </form>
+      <button type="button" class="botao botao-secundario" id="botao-google" style="margin-top: 12px;">Entrar com Google</button>
+      <p class="texto-suave" style="margin-top: 16px; text-align: center;">
+        Não tem conta? <a href="#/cadastro">Cadastre-se</a>
+      </p>
+    </section>
+
+    <section class="tela" data-rota="#/cadastro" id="tela-cadastro">
+      <p class="titulo-tela">Criar conta</p>
+      <form id="form-cadastro">
+        <input class="campo" type="text" placeholder="Nome" required />
+        <input class="campo" type="email" placeholder="Email" required />
+        <input class="campo" type="password" placeholder="Senha" required />
+        <button type="submit" class="botao">Criar conta</button>
+      </form>
+      <p class="texto-suave" style="margin-top: 16px; text-align: center;">
+        Já tem conta? <a href="#/login">Entrar</a>
+      </p>
+    </section>
+
+    <section class="tela" data-rota="#/inicio" id="tela-inicio">
+      <p class="titulo-tela" id="inicio-saudacao"></p>
+      <div class="card">
+        <p class="texto-suave">Seus pontos</p>
+        <p style="font-size: 32px; font-weight: 700; color: var(--verde);" id="inicio-pontos"></p>
+        <span class="badge-nivel" id="inicio-nivel"></span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
+        <a href="#/reciclar" class="card" style="text-decoration:none; color:inherit; text-align:center;">♻️<br />Reciclar</a>
+        <a href="#/recompensas" class="card" style="text-decoration:none; color:inherit; text-align:center;">🎁<br />Recompensas</a>
+        <a href="#/lixeiras" class="card" style="text-decoration:none; color:inherit; text-align:center;">📍<br />Lixeiras</a>
+        <a href="#/ranking" class="card" style="text-decoration:none; color:inherit; text-align:center;">🏆<br />Ranking</a>
+      </div>
+    </section>
+
+    <section class="tela" data-rota="#/reciclar" id="tela-reciclar">
+      <p class="titulo-tela">Reciclar</p>
+      <div class="card" style="background: linear-gradient(135deg, #263238, #37474F); color: #fff; text-align: center; padding: 40px 16px;">
+        <p style="font-size: 40px;">📷</p>
+        <p class="texto-suave" style="color: #cfd8dc;">Aponte a câmera para o QR Code da lixeira</p>
+      </div>
+      <button class="botao" id="botao-simular-qr">Simular leitura de QR</button>
+
+      <div id="reciclar-resultado" style="display:none; margin-top: 16px;">
+        <div class="card">
+          <p class="texto-suave" id="reciclar-endereco"></p>
+          <ul id="reciclar-itens" style="list-style:none; margin-top: 8px;"></ul>
+          <p style="font-weight:700; margin-top: 8px;" id="reciclar-total"></p>
+        </div>
+        <button class="botao" id="botao-receber-pontos">Receber Pontos</button>
+      </div>
+    </section>
+
+    <section class="tela" data-rota="#/recompensas" id="tela-recompensas">
+      <p class="titulo-tela">Recompensas</p>
+      <p class="texto-suave">Saldo: <strong id="recompensas-saldo"></strong></p>
+      <div id="recompensas-lista" style="margin-top: 16px;"></div>
+    </section>
+
+    <section class="tela" data-rota="#/cupom" id="tela-cupom">
+      <p class="titulo-tela">🎉 Cupom gerado!</p>
+      <div class="card" style="text-align:center;">
+        <p style="font-weight:600;" id="cupom-titulo"></p>
+        <div id="cupom-qrcode" style="display:flex; justify-content:center; margin: 16px 0;"></div>
+        <p style="font-size: 20px; font-weight:700; letter-spacing: 1px;" id="cupom-codigo"></p>
+        <p class="texto-suave" id="cupom-validade"></p>
+      </div>
+      <a href="#/inicio" class="botao" style="margin-top:16px;">Voltar ao início</a>
+    </section>
+
+    <section class="tela" data-rota="#/historico" id="tela-historico">
+      <p class="titulo-tela">Histórico</p>
+      <div class="card" id="historico-totais"></div>
+      <div id="historico-lista"></div>
+    </section>
+
+    <section class="tela" data-rota="#/ranking" id="tela-ranking">
+      <p class="titulo-tela">Ranking</p>
+      <div id="ranking-lista"></div>
+    </section>
+
+    <section class="tela" data-rota="#/perfil" id="tela-perfil">
+      <p class="titulo-tela">Perfil</p>
+      <div class="card" style="text-align:center;">
+        <img id="perfil-foto" style="width:80px; height:80px; border-radius:50%;" />
+        <p style="font-weight:700; margin-top:8px;" id="perfil-nome"></p>
+        <span class="badge-nivel" id="perfil-nivel"></span>
+        <p class="texto-suave" style="margin-top:8px;" id="perfil-pontos"></p>
+      </div>
+      <div class="card texto-suave">Configurações (em breve)</div>
+      <button class="botao botao-secundario" id="botao-sair">Sair</button>
+    </section>
+
+    <section class="tela" data-rota="#/lixeiras" id="tela-lixeiras">
+      <p class="titulo-tela">Lixeiras cadastradas</p>
+      <div id="lixeiras-lista"></div>
+    </section>
+  </main>
+
+  <nav id="nav-bar">
+    <a href="#/inicio" class="nav-item" data-rota="#/inicio"><span>🏠</span><span>Início</span></a>
+    <a href="#/historico" class="nav-item" data-rota="#/historico"><span>📜</span><span>Histórico</span></a>
+    <a href="#/ranking" class="nav-item" data-rota="#/ranking"><span>🏆</span><span>Ranking</span></a>
+    <a href="#/perfil" class="nav-item" data-rota="#/perfil"><span>👤</span><span>Perfil</span></a>
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/router.js"></script>
+</body>
+</html>
