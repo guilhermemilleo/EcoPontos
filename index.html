@@ -15,9 +15,9 @@
         <input class="campo" type="password" placeholder="Senha" required />
         <button type="submit" class="botao">Entrar</button>
       </form>
-      <button type="button" class="botao botao-secundario" id="botao-google" style="margin-top: 12px;">Entrar com Google</button>
+      <button type="button" class="botao botao-alternativo" id="botao-google" style="margin-top: 12px;">Entrar com Google</button>
       <p class="texto-suave" style="margin-top: 16px; text-align: center;">
-        Não tem conta? <a href="#/cadastro">Cadastre-se</a>
+        Não tem conta? <a href="#/cadastro" class="link">Cadastre-se</a>
       </p>
     </section>
 
@@ -30,30 +30,35 @@
         <button type="submit" class="botao">Criar conta</button>
       </form>
       <p class="texto-suave" style="margin-top: 16px; text-align: center;">
-        Já tem conta? <a href="#/login">Entrar</a>
+        Já tem conta? <a href="#/login" class="link">Entrar</a>
       </p>
     </section>
 
     <section class="tela" data-rota="#/inicio" id="tela-inicio">
       <p class="titulo-tela" id="inicio-saudacao"></p>
-      <div class="card">
-        <p class="texto-suave">Seus pontos</p>
-        <p style="font-size: 32px; font-weight: 700; color: var(--verde);" id="inicio-pontos"></p>
-        <span class="badge-nivel" id="inicio-nivel"></span>
+      <div class="card inicio-pontos-card" id="inicio-pontos-card">
+        <p class="texto-suave inicio-pontos-label">Seus pontos</p>
+        <div class="inicio-pontos-linha">
+          <p class="inicio-pontos-valor" id="inicio-pontos"></p>
+          <span class="badge-nivel" id="inicio-nivel"></span>
+        </div>
       </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
-        <a href="#/reciclar" class="card" style="text-decoration:none; color:inherit; text-align:center;">♻️<br />Reciclar</a>
-        <a href="#/recompensas" class="card" style="text-decoration:none; color:inherit; text-align:center;">🎁<br />Recompensas</a>
-        <a href="#/lixeiras" class="card" style="text-decoration:none; color:inherit; text-align:center;">📍<br />Lixeiras</a>
-        <a href="#/ranking" class="card" style="text-decoration:none; color:inherit; text-align:center;">🏆<br />Ranking</a>
+      <div class="inicio-atalhos">
+        <a href="#/reciclar" class="card atalho"><span class="atalho-icone">♻️</span><span class="atalho-label">Reciclar</span></a>
+        <a href="#/recompensas" class="card atalho"><span class="atalho-icone">🎁</span><span class="atalho-label">Recompensas</span></a>
+        <a href="#/lixeiras" class="card atalho"><span class="atalho-icone">📍</span><span class="atalho-label">Lixeiras</span></a>
+        <a href="#/ranking" class="card atalho"><span class="atalho-icone">🏆</span><span class="atalho-label">Ranking</span></a>
       </div>
     </section>
 
     <section class="tela" data-rota="#/reciclar" id="tela-reciclar">
-      <p class="titulo-tela">Reciclar</p>
-      <div class="card" style="background: linear-gradient(135deg, #263238, #37474F); color: #fff; text-align: center; padding: 40px 16px;">
+      <div class="cabecalho-tela">
+        <a href="#/inicio" class="botao-voltar" aria-label="Voltar ao início">←</a>
+        <p class="titulo-tela">Reciclar</p>
+      </div>
+      <div class="card" style="background: linear-gradient(135deg, var(--camera-escuro), var(--camera-medio)); color: #fff; text-align: center; padding: 40px 16px;">
         <p style="font-size: 40px;">📷</p>
-        <p class="texto-suave" style="color: #cfd8dc;">Aponte a câmera para o QR Code da lixeira</p>
+        <p class="texto-suave" style="color: var(--camera-legenda);">Aponte a câmera para o QR Code da lixeira</p>
       </div>
       <button class="botao" id="botao-simular-qr">Simular leitura de QR</button>
 
@@ -68,7 +73,10 @@
     </section>
 
     <section class="tela" data-rota="#/recompensas" id="tela-recompensas">
-      <p class="titulo-tela">Recompensas</p>
+      <div class="cabecalho-tela">
+        <a href="#/inicio" class="botao-voltar" aria-label="Voltar ao início">←</a>
+        <p class="titulo-tela">Recompensas</p>
+      </div>
       <p class="texto-suave">Saldo: <strong id="recompensas-saldo"></strong></p>
       <div id="recompensas-lista" style="margin-top: 16px;"></div>
     </section>
@@ -78,7 +86,7 @@
       <div class="card" style="text-align:center;">
         <p style="font-weight:600;" id="cupom-titulo"></p>
         <div id="cupom-qrcode" style="display:flex; justify-content:center; margin: 16px 0;"></div>
-        <p style="font-size: 20px; font-weight:700; letter-spacing: 1px;" id="cupom-codigo"></p>
+        <p style="font-size: 22px; font-weight:700; letter-spacing: 1px;" id="cupom-codigo"></p>
         <p class="texto-suave" id="cupom-validade"></p>
       </div>
       <a href="#/inicio" class="botao" style="margin-top:16px;">Voltar ao início</a>
@@ -98,7 +106,9 @@
     <section class="tela" data-rota="#/perfil" id="tela-perfil">
       <p class="titulo-tela">Perfil</p>
       <div class="card" style="text-align:center;">
-        <img id="perfil-foto" style="width:80px; height:80px; border-radius:50%;" />
+
+        <div class="avatar-iniciais" id="perfil-avatar"></div>
+
         <p style="font-weight:700; margin-top:8px;" id="perfil-nome"></p>
         <span class="badge-nivel" id="perfil-nivel"></span>
         <p class="texto-suave" style="margin-top:8px;" id="perfil-pontos"></p>
@@ -108,16 +118,54 @@
     </section>
 
     <section class="tela" data-rota="#/lixeiras" id="tela-lixeiras">
-      <p class="titulo-tela">Lixeiras cadastradas</p>
+      <div class="cabecalho-tela">
+        <a href="#/inicio" class="botao-voltar" aria-label="Voltar ao início">←</a>
+        <p class="titulo-tela">Lixeiras cadastradas</p>
+      </div>
       <div id="lixeiras-lista"></div>
     </section>
   </main>
 
+  <div id="overlay-nivel" class="overlay-nivel" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="overlay-nivel-nome">
+    <div class="overlay-nivel-card">
+      <p class="overlay-nivel-emoji" id="overlay-nivel-emoji"></p>
+      <p class="overlay-nivel-titulo">Você subiu de nível!</p>
+      <p class="overlay-nivel-nome" id="overlay-nivel-nome"></p>
+      <button type="button" class="botao" id="botao-fechar-nivel">Continuar</button>
+    </div>
+  </div>
+
+  <div id="overlay-confirmar-resgate" class="overlay-confirmar" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="confirmar-resgate-titulo">
+    <div class="overlay-confirmar-card">
+      <p class="texto-suave">Confirmar resgate</p>
+      <p id="confirmar-resgate-titulo" style="font-weight:600; margin: 4px 0 8px;"></p>
+      <p class="texto-suave" id="confirmar-resgate-detalhe" style="margin-bottom:20px;"></p>
+      <button type="button" class="botao" id="botao-confirmar-resgate">Confirmar resgate</button>
+      <button type="button" class="botao botao-alternativo" style="margin-top:8px;" id="botao-cancelar-resgate">Cancelar</button>
+    </div>
+  </div>
+
   <nav id="nav-bar">
-    <a href="#/inicio" class="nav-item" data-rota="#/inicio"><span>🏠</span><span>Início</span></a>
-    <a href="#/historico" class="nav-item" data-rota="#/historico"><span>📜</span><span>Histórico</span></a>
-    <a href="#/ranking" class="nav-item" data-rota="#/ranking"><span>🏆</span><span>Ranking</span></a>
-    <a href="#/perfil" class="nav-item" data-rota="#/perfil"><span>👤</span><span>Perfil</span></a>
+    <a href="#/inicio" class="nav-item" data-rota="#/inicio">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9a1 1 0 0 0 1 1h3v-5h4v5h3a1 1 0 0 0 1-1v-9"/></svg>
+      <span>Início</span>
+    </a>
+    <a href="#/reciclar" class="nav-item" data-rota="#/reciclar">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V5a1 1 0 0 1 1-1h3"/><path d="M16 4h3a1 1 0 0 1 1 1v3"/><path d="M20 16v3a1 1 0 0 1-1 1h-3"/><path d="M8 20H5a1 1 0 0 1-1-1v-3"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+      <span>Reciclar</span>
+    </a>
+    <a href="#/historico" class="nav-item" data-rota="#/historico">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v4h4"/><path d="M12 8v4l3 2"/></svg>
+      <span>Histórico</span>
+    </a>
+    <a href="#/ranking" class="nav-item" data-rota="#/ranking">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a1 1 0 0 0-1 1v1a4 4 0 0 0 4 4"/><path d="M17 5h3a1 1 0 0 1 1 1v1a4 4 0 0 1-4 4"/><path d="M12 13v3"/><path d="M9 20h6"/><path d="M10 17h4l.5 3h-5l.5-3Z"/></svg>
+      <span>Ranking</span>
+    </a>
+    <a href="#/perfil" class="nav-item" data-rota="#/perfil">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg>
+      <span>Perfil</span>
+    </a>
   </nav>
 
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>

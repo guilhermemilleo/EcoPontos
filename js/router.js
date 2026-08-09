@@ -43,6 +43,24 @@ function iniciarEventos() {
   document.getElementById("botao-sair").addEventListener("click", () => {
     window.location.hash = "#/login";
   });
+
+  document.getElementById("botao-fechar-nivel").addEventListener("click", fecharOverlayNivel);
+  document.getElementById("overlay-nivel").addEventListener("click", (e) => {
+    if (e.target.id === "overlay-nivel") fecharOverlayNivel();
+  });
+
+  document.getElementById("botao-confirmar-resgate").addEventListener("click", confirmarResgatePendente);
+  document.getElementById("botao-cancelar-resgate").addEventListener("click", fecharOverlayConfirmarResgate);
+  document.getElementById("overlay-confirmar-resgate").addEventListener("click", (e) => {
+    if (e.target.id === "overlay-confirmar-resgate") fecharOverlayConfirmarResgate();
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      fecharOverlayNivel();
+      fecharOverlayConfirmarResgate();
+    }
+  });
 }
 
 window.addEventListener("hashchange", mostrarTela);

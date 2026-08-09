@@ -23,9 +23,14 @@ function gerarCodigoCupom() {
   return `ECO-${codigo}`;
 }
 
-function simularLeituraLixeira() {
-  const lixeira = state.lixeirasTeste[state.proximaLixeiraIndex];
-  state.proximaLixeiraIndex = (state.proximaLixeiraIndex + 1) % state.lixeirasTeste.length;
+function simularLeituraLixeira(forcarLixeiraId) {
+  const lixeiraForcada = forcarLixeiraId && state.lixeirasTeste.find((l) => l.id === forcarLixeiraId);
+  let lixeira = lixeiraForcada;
+
+  if (!lixeira) {
+    lixeira = state.lixeirasTeste[state.proximaLixeiraIndex];
+    state.proximaLixeiraIndex = (state.proximaLixeiraIndex + 1) % state.lixeirasTeste.length;
+  }
 
   const itensComPontos = lixeira.itens.map((item) => ({
     ...item,

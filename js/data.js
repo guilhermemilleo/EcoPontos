@@ -1,6 +1,5 @@
 const USUARIO_INICIAL = {
   nome: "Ana Souza",
-  fotoUrl: "https://i.pravatar.cc/150?img=47",
   pontos: 450,
   pontosTotais: 1450,
 };
