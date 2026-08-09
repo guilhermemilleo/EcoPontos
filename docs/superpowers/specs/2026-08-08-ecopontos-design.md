@@ -1,88 +1,67 @@
-# EcoPontos — Design
+# EcoPontos — Mockup Clicável
 
 **Data:** 2026-08-08
 **Status:** Aprovado para planejamento
 
 ## 1. Visão geral
 
-EcoPontos é um webapp (PWA instalável) que recompensa usuários por reciclar materiais em lixeiras inteligentes. O usuário escaneia o QR Code de uma lixeira, o sistema registra os materiais reciclados, credita pontos, e permite resgatar recompensas (descontos, cupons, vale-compras) geradas como QR Codes com validade de 30 dias. Inclui histórico de reciclagem, ranking de usuários e perfil.
+EcoPontos é um mockup clicável (protótipo estático, não funcional) de um app que recompensaria usuários por reciclar materiais em lixeiras inteligentes. O objetivo é demonstrar o fluxo completo — escanear QR Code de uma lixeira, ganhar pontos, resgatar recompensas, ver histórico e ranking — sem nenhum backend real por trás.
 
-Este é um app funcional real (não um protótipo mockado): autenticação real, banco de dados real, leitura de QR Code via câmera real. Como não existem lixeiras físicas com QR Code ainda, o MVP usa um conjunto de QR Codes de teste pré-cadastrados no banco, cada um mapeado para uma combinação fixa de materiais/quantidades — simulando lixeiras reais sem depender de hardware.
+Não há autenticação real, banco de dados real, nem leitura de câmera real. Todo o estado (usuário, pontos, histórico) vive em um objeto JavaScript em memória, criado do zero a cada carregamento da página. Login, cadastro e leitura de QR Code são simulados: qualquer interação "funciona" e avança o fluxo, sem validar nada de verdade.
 
 ## 2. Arquitetura
 
-- **Frontend:** React + Vite, PWA instalável (`vite-plugin-pwa`: manifest + service worker), mobile-first, responsivo.
-- **Backend/infra:** Firebase
-  - **Authentication:** email/senha + Google (OAuth)
-  - **Firestore:** banco de dados principal
-  - **Hosting:** Firebase Hosting para deploy
-- **Leitura de QR Code:** `html5-qrcode` (acesso à câmera do navegador via `getUserMedia`)
-- **Geração de QR Code de cupom:** `qrcode.react`
-- **Roteamento:** React Router — rotas protegidas exigem sessão autenticada
-- **Estado:** Context API + hooks (escopo não justifica Redux/Zustand)
+- **Stack:** HTML + CSS + JavaScript puro. Sem framework, sem build step, sem dependências de backend.
+- **Navegação:** hash routing (`#/inicio`, `#/reciclar`, etc.) — um script mostra/esconde a `<section>` correspondente ao hash atual. Dá URLs navegáveis e funciona com o botão voltar do navegador.
+- **Estado:** um único objeto JS em memória (`state`), populado com dados fake no carregamento e atualizado pelas interações do usuário (ex: resgatar uma recompensa debita `state.pontos`). Nada persiste entre reloads.
+- **QR Code do cupom:** biblioteca JS leve para geração de QR Code (ex: `qrcode.js`), carregada via CDN.
 
-## 3. Modelo de dados (Firestore)
+## 3. Dados fake (em memória)
 
-**`users/{uid}`**
-```
-nome: string
-email: string
-fotoUrl: string
-pontos: number          // saldo atual (disponível para resgate)
-pontosTotais: number    // acumulado histórico (define o nível)
-criadoEm: timestamp
-```
+Sem coleções de banco — objetos JS fixos, carregados no início:
 
-**`lixeiras/{codigoQR}`** — dados de teste, pré-cadastrados
-```
-localizacao: { endereco: string, lat: number, lng: number }
-itensPadrao: [{ material: string, quantidade: number }]
-```
-
-**`reciclagens/{id}`** — histórico de leituras confirmadas
-```
-uid: string
-data: timestamp
-itens: [{ material: string, quantidade: number, pontosGanhos: number }]
-totalPontos: number
+```js
+state = {
+  usuario: { nome, fotoUrl, pontos, pontosTotais },
+  lixeirasTeste: [
+    { id, endereco, itens: [{ material, quantidade }] },
+    // 3–4 lixeiras pré-definidas com combinações diferentes
+  ],
+  recompensas: [
+    { titulo, custoPontos, tipo },
+    // catálogo fixo, ver seção 4
+  ],
+  historico: [
+    { data, itens: [{ material, quantidade, pontosGanhos }], totalPontos },
+    // 3–5 reciclagens fake pré-populadas
+  ],
+  ranking: [
+    { nome, pontos },
+    // ~8 usuários fake fixos; a posição do usuário atual é calculada e inserida
+  ],
+  resgates: [], // populado em memória conforme o usuário resgata recompensas na sessão
+}
 ```
 
-**`recompensas/{id}`** — catálogo fixo (seed inicial)
-```
-titulo: string
-custoPontos: number
-tipo: "desconto" | "cupom" | "vale"
-```
+Toda "ação" (login, simular leitura de QR, resgatar) só atualiza `state` e navega para a próxima tela — nenhuma validação real de senha, nenhuma escrita em banco.
 
-**`resgates/{id}`** — cupom gerado ao resgatar uma recompensa
-```
-uid: string
-recompensaId: string
-codigo: string          // formato ECO-XXXXXX
-geradoEm: timestamp
-validadeEm: timestamp   // geradoEm + 30 dias
-usado: boolean
-```
+## 4. Regras de negócio (mantidas do conceito original, aplicadas em memória)
 
-**Ranking:** não é uma coleção própria — query em `users` ordenada por `pontos` (ou `pontosTotais`), limitada a 10.
-
-## 4. Regras de negócio
-
-**Pontos por material** (derivados dos exemplos do mockup original):
+**Pontos por material:**
 | Material | Pontos/unidade |
 |---|---|
 | PET | 10 |
 | Alumínio/Lata | 15 |
 | Papel | 20 |
 
-**Níveis** (por `pontosTotais` acumulado — nunca decresce com resgates):
+**Níveis** (por `pontosTotais` — não decresce com resgates):
 | Nível | Faixa |
 |---|---|
 | 🥉 Bronze | 0 – 999 |
 | 🥈 Prata | 1.000 – 4.999 |
 | 🥇 Ouro | 5.000+ |
 
-**Catálogo de recompensas inicial:**
+**Catálogo de recompensas:**
 | Recompensa | Custo |
 |---|---|
 | 5% de desconto | 300 pts |
@@ -90,30 +69,26 @@ usado: boolean
 | Cupom R$20 | 1.000 pts |
 | Vale-compras R$50 | 2.000 pts |
 
-**Fluxo de resgate:** valida saldo (`pontos`) suficiente → debita de `pontos` (não afeta `pontosTotais`/nível) → cria documento em `resgates` com código único `ECO-XXXXXX` e validade de 30 dias a partir da geração.
+**Fluxo de resgate:** valida saldo (`state.usuario.pontos`) suficiente → debita de `pontos` (não afeta `pontosTotais`/nível) → cria registro em `state.resgates` com código fake `ECO-XXXXXX` e validade fake de 30 dias a partir do momento do resgate.
 
 ## 5. Telas e rotas
 
-| Rota | Tela | Acesso |
+| Rota | Tela | Comportamento no mockup |
 |---|---|---|
-| `/login` | Login (email/senha, Google, link cadastro) | Pública |
-| `/cadastro` | Criar conta | Pública |
-| `/` | Início — saudação, pontos, nível, navegação principal | Protegida |
-| `/reciclar` | Escaneia QR da lixeira → exibe itens lidos e pontos → "Receber Pontos" | Protegida |
-| `/recompensas` | Saldo + catálogo de recompensas, botão Resgatar | Protegida |
-| `/cupom/:id` | Tela de sucesso: QR Code do cupom, código, validade | Protegida |
-| `/historico` | Lista de reciclagens + totais agregados por material | Protegida |
-| `/ranking` | Top 10 por pontos; destaca posição do usuário se fora do top 10 | Protegida |
-| `/perfil` | Nome, foto, nível, pontos, configurações (placeholder), sair | Protegida |
-| `/lixeiras` | Lista de lixeiras de teste cadastradas com endereço | Protegida |
+| `#/login` | Login | Formulário fake (email/senha) — qualquer entrada "loga" e vai para `#/inicio`. Botão Google também loga direto. Link para cadastro. |
+| `#/cadastro` | Criar conta | Formulário fake — "criar conta" também loga direto e vai para `#/inicio`. |
+| `#/inicio` | Início | Saudação, pontos e nível do usuário fake, atalhos para as outras telas. |
+| `#/reciclar` | Reciclar | Tela de câmera fake (visual estático, sem acesso real à câmera) + botão **"Simular leitura de QR"**, que cicla entre as lixeiras de teste a cada clique. Mostra itens lidos e pontos a ganhar, com botão "Receber Pontos" que soma ao saldo em `state`. |
+| `#/recompensas` | Recompensas | Catálogo fixo + saldo atual. Botão "Resgatar" desabilitado (com indicação do quanto falta) se saldo insuficiente; senão, resgata e navega para `#/cupom/:id`. |
+| `#/cupom/:id` | Cupom | QR Code gerado a partir do código fake, mais o código `ECO-XXXXXX` e a validade (30 dias a partir do resgate). |
+| `#/historico` | Histórico | Lista fixa de reciclagens (pré-populada + as feitas na sessão) e totais agregados por material. |
+| `#/ranking` | Ranking | Top 10 fake; destaca a posição do usuário atual, mesmo se fora do top 10. |
+| `#/perfil` | Perfil | Nome, foto, nível, pontos do usuário fake, configurações (placeholder), botão "Sair" volta para `#/login`. |
+| `#/lixeiras` | Lixeiras | Lista das lixeiras de teste com endereço fake. |
 
-**Navegação:** bottom navigation bar fixa (mobile) com Início, Histórico, Ranking, Perfil, presente em todas as rotas protegidas.
+**Navegação:** bottom navigation bar fixa (mobile) com Início, Histórico, Ranking, Perfil, presente em todas as telas pós-login.
 
-**Tratamento de erros:**
-- QR Code não reconhecido (não existe em `lixeiras`) → mensagem de erro, permite tentar novamente
-- Permissão de câmera negada → instrução de como habilitar nas configurações do navegador
-- Falha de login/cadastro → mensagem de erro inline no formulário
-- Saldo insuficiente para resgate → botão "Resgatar" desabilitado com indicação do quanto falta
+**Tratamento de "erro":** único caso mantido é o botão de resgate desabilitado por saldo insuficiente — puramente visual, sem lógica de erro real (não há câmera real nem senha real para falhar).
 
 ## 6. Identidade visual
 
@@ -122,19 +97,23 @@ usado: boolean
 - ⚪ Branco (fundo): `#FFFFFF`
 - 🟡 Dourado (destaque/nível Ouro, badges): `#FFC107`
 
-## 7. Fora de escopo (MVP)
+Layout mobile-first, responsivo.
 
-- Mapa interativo real (Google Maps API) — usamos lista simples de lixeiras cadastradas
-- Painel administrativo para gerenciar recompensas/lixeiras (catálogo é seed fixo)
-- Validação de uso do cupom em loja física (campo `usado` existe no modelo, mas não há fluxo de quem marca)
-- Geolocalização em tempo real do usuário
+## 7. Fora de escopo
+
+- Autenticação real, banco de dados real, persistência entre sessões
+- Leitura de câmera real / acesso a `getUserMedia`
+- PWA instalável (manifest, service worker)
+- Mapa interativo real
+- Painel administrativo
+- Testes automatizados
+
+Tudo isso fica para uma fase futura, caso o mockup seja aprovado e se decida construir o app funcional de verdade.
 
 ## 8. Testes
 
-- Testes unitários das regras de pontuação e cálculo de nível (funções puras)
-- Testes de componente para os formulários (login, cadastro, resgate)
-- Teste manual do fluxo completo: login → escanear QR de teste → ganhar pontos → resgatar recompensa → ver cupom → conferir histórico e ranking atualizados
+Apenas manual: percorrer o fluxo completo (login → simular leitura de QR → ganhar pontos → resgatar recompensa → ver cupom → conferir histórico e ranking atualizados), verificando em viewport mobile (estreito) e desktop.
 
 ## 9. Deploy
 
-Firebase Hosting, com projeto Firebase configurado para Authentication (email/senha + Google) e Firestore.
+Publicação como site estático (pasta com `index.html`, CSS, JS) em GitHub Pages ou Netlify — sem build step, é literalmente subir os arquivos. Objetivo é gerar um link compartilhável para visualização em qualquer dispositivo, incluindo celular.
