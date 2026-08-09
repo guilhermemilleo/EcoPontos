@@ -115,9 +115,12 @@ a.card:focus-visible { outline: 2px solid var(--verde); outline-offset: 2px; }
   width: 44px; height: 44px; flex-shrink: 0;
   border: 1px solid var(--borda); border-radius: 10px;
   background: var(--branco); color: var(--texto);
-  font-size: 22px; text-decoration: none;
+  text-decoration: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
 }
-.botao-voltar:hover { background: var(--fundo-suave); }
+.botao-voltar-icone { width: 20px; height: 20px; }
+.botao-voltar:hover { background: var(--fundo-suave); border-color: var(--verde); color: var(--verde); }
+.botao-voltar:active { transform: scale(0.94); }
 .botao-voltar:focus-visible { outline: 2px solid var(--verde); outline-offset: 2px; }
 .link { color: var(--azul); font-weight: 600; text-decoration: underline; }
 .link:focus-visible { outline: 2px solid var(--verde); outline-offset: 2px; }
