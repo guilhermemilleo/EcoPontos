@@ -7,7 +7,7 @@ const USUARIO_INICIAL = {
 const LIXEIRAS_TESTE = [
   {
     id: "eco-001",
-    endereco: "Ginásio do Polacão, R. Agenor Nascimento, 1057",
+    endereco: "Ginásio Polacão, R. Agenor Nascimento, 1057",
     itens: [
       { material: "PET", quantidade: 3 },
       { material: "Papel", quantidade: 2 },
