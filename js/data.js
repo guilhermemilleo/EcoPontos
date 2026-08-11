@@ -7,7 +7,7 @@ const USUARIO_INICIAL = {
 const LIXEIRAS_TESTE = [
   {
     id: "eco-001",
-    endereco: "Praça Central, 100",
+    endereco: "Ginásio do Polacão, R. Agenor Nascimento, 1057",
     itens: [
       { material: "PET", quantidade: 3 },
       { material: "Papel", quantidade: 2 },
@@ -15,12 +15,12 @@ const LIXEIRAS_TESTE = [
   },
   {
     id: "eco-002",
-    endereco: "Parque das Árvores, s/n",
+    endereco: "Praça do Iguaçu, R. João Gabriel Martins, 1",
     itens: [{ material: "Alumínio", quantidade: 5 }],
   },
   {
     id: "eco-003",
-    endereco: "Shopping Vale Verde - Praça de Alimentação",
+    endereco: "Rua do Mathe, Av. Ozy Mendonça de Lima, 5",
     itens: [
       { material: "PET", quantidade: 1 },
       { material: "Alumínio", quantidade: 2 },
